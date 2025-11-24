@@ -8,6 +8,7 @@ on:
 jobs:
   run_matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     strategy:
       fail-fast: false
       matrix:

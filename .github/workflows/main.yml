@@ -1,4 +1,4 @@
-name: Build & Run 3 Containers
+name: Build & Run 20 Containers (Matrix)
 
 on:
   workflow_dispatch:
@@ -6,8 +6,13 @@ on:
     branches: ["main"]
 
 jobs:
-  build_and_run:
+  run_matrix:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        index: [1,2,3,4,5,6,7,8,9,10,
+                11,12,13,14,15,16,17,18,19,20]
 
     steps:
     - name: Checkout source
@@ -16,14 +21,14 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t local-selenium-videozz .
-    
-    - name: Run 3 containers in parallel
+
+    - name: Run container
       run: |
-        docker run --rm --name selenium_1 --shm-size=2g local-selenium-videozz &
-        docker run --rm --name selenium_2 --shm-size=2g local-selenium-videozz &
-        docker run --rm --name selenium_3 --shm-size=2g local-selenium-videozz &
-        wait
+        echo "Running container number: ${ { matrix.index } }"
+        docker run --rm \
+          --name selenium_${{ matrix.index }} \
+          --shm-size=2g \
+          local-selenium-videozz
 
-
-    - name: Show running containers
-      run: docker ps -a
+    - name: Show container exit
+      run: echo "Container ${{ matrix.index }} finished."

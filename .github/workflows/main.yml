@@ -1,0 +1,31 @@
+name: Build & Run 3 Containers
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  build_and_run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: |
+        docker build -t local-selenium-videozz .
+
+    - name: Run 3 containers in parallel
+      run: |
+        for i in 1 2 3; do
+          echo "Starting container $i..."
+          docker run -d \
+            --name selenium_$i \
+            --shm-size=2g \
+            local-selenium-videozz
+        done
+
+    - name: Show running containers
+      run: docker ps -a

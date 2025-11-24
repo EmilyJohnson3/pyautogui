@@ -24,11 +24,11 @@ jobs:
 
     - name: Run container
       run: |
-        echo "Running container number: ${ { matrix.index } }"
+        echo "Running container number: ${{ matrix.index }}"
         docker run --rm \
           --name selenium_${{ matrix.index }} \
           --shm-size=2g \
           local-selenium-videozz
 
-    - name: Show container exit
+    - name: Finished
       run: echo "Container ${{ matrix.index }} finished."
